@@ -31,7 +31,7 @@ export default function GeneratePage() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/generate", {
+      const response = await axios.post("https://fakepaper.app/api/generate", {
         topic: topic,
         isPremium: true, // Set this based on your application's logic
       });
