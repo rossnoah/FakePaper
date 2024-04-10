@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import NonSsr from "@/components/non-ssr";
 
-export const ssr = false;
-
 const localStorageKey = "pdfItems"; // Key used to store data in localStorage
 
 export default function GeneratePage() {
