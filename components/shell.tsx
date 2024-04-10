@@ -16,7 +16,7 @@ export function Shell({
             <FileTextIcon className="h-8 w-8" />
             <div className="flex flex-col">
               <h1 className="text-xl font-bold tracking-tighter/none">
-                FakePaper.io
+                FakePaper.app
               </h1>
               <p className="text-xs leading-none text-gray-500/40 dark:text-gray-400/40">
                 Your Source for Academic Satire

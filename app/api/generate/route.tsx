@@ -10,6 +10,11 @@ interface generateRequestBody {
   isPremium: boolean;
 }
 
+export interface generateReponseFormat {
+  message: string;
+  url: string;
+}
+
 export async function POST(request: Request) {
   try {
     const body: generateRequestBody = await request.json();
@@ -36,12 +41,24 @@ export async function POST(request: Request) {
 
     const latex = cleanLaTeX(response);
 
-    //plain text response
-    return new NextResponse(latex, {
+    //send a post request to worker.fakepaper.app/latex with the latex as a plain text body
+    const workerResponse = await fetch("https://worker.fakepaper.app/latex", {
+      method: "POST",
       headers: {
         "Content-Type": "text/plain",
+        Authorization: "Bearer " + process.env.WORKER_AUTH_TOKEN,
       },
+      body: latex,
     });
+
+    if (!workerResponse.ok) {
+      return new NextResponse("An error occurred in the worker", {
+        status: 500,
+      });
+    }
+    const workerResponseJson = await workerResponse.json();
+
+    return NextResponse.json(workerResponseJson);
   } catch (error) {
     return new NextResponse("An error occurred", { status: 500 });
   }
