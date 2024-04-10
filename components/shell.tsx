@@ -24,13 +24,19 @@ export function Shell({
             </div>
           </div>
         </Link>
-        <nav className="ml-auto hidden lg:flex gap-4 lg:gap-6">
+        <nav className="ml-auto hidden lg:flex gap-4 lg:gap-6 bg">
           {/* <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="features"
           >
             Features
           </Link> */}
+          <Link
+            className="text-sm font-medium hover:underline underline-offset-4"
+            href="generate"
+          >
+            Generate
+          </Link>
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="pricing"
