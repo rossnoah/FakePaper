@@ -18,7 +18,7 @@ export function Shell({
               <h1 className="text-xl font-bold tracking-tighter/none">
                 FakePaper.app
               </h1>
-              <p className="text-xs leading-none text-gray-500/40 dark:text-gray-400/40">
+              <p className="text-xs leading-none text-gray-500 dark:text-gray-400/40">
                 Your Source for Academic Satire
               </p>
             </div>
