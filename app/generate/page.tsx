@@ -11,11 +11,7 @@ import NonSsr from "@/components/non-ssr";
 const localStorageKey = "pdfItems"; // Key used to store data in localStorage
 
 export default function GeneratePage() {
-  return (
-    <NonSsr>
-      <GenerateWrapper />
-    </NonSsr>
-  );
+  return <GenerateWrapper />;
 }
 
 function GenerateWrapper() {
@@ -129,20 +125,22 @@ function Generate({
       >
         {isLoading ? "Generating..." : "Generate"}
       </Button>
-      <div className="grid gap-2">
-        {pdfItems.map((item, index) => (
-          <a
-            href={item.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex w-full justify-start items-center p-2 border border-gray-200 rounded hover:bg-gray-100"
-            key={index}
-          >
-            <FileIcon className="mr-2 h-4 w-4" />
-            {item.name}
-          </a>
-        ))}
-      </div>
+      <NonSsr>
+        <div className="grid gap-2">
+          {pdfItems.map((item, index) => (
+            <a
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full justify-start items-center p-2 border border-gray-200 rounded hover:bg-gray-100"
+              key={index}
+            >
+              <FileIcon className="mr-2 h-4 w-4" />
+              {item.name}
+            </a>
+          ))}
+        </div>
+      </NonSsr>
     </div>
   );
 }
