@@ -32,9 +32,6 @@ export function SplashPage() {
             </form>
             <p className="text-xs text-gray-500 dark:text-gray-400">
               Enter your email to get notified when we launch.
-              <Link className="underline underline-offset-2" href="#">
-                Terms & Conditions
-              </Link>
             </p>
           </div>
         </div>

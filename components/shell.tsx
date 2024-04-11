@@ -49,12 +49,12 @@ export function Shell({
           >
             Templates
           </Link> */}
-          <Link
+          {/* <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="about"
           >
             About
-          </Link>
+          </Link> */}
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="contact"
