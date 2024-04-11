@@ -68,6 +68,10 @@ function GenerateWrapper() {
       const name = title ?? `Paper #${pdfItems.length + 1}`;
       setPdfItems([...pdfItems, { name: name, url }]);
       setTopic(""); // Clear the input field
+      toast({
+        title: "Your paper is ready!",
+        description: "Click the link below to view or download it.",
+      });
     } catch (error) {
       console.error("Failed to generate PDF:", error);
       toast({
