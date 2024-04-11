@@ -8,6 +8,8 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import NonSsr from "@/components/non-ssr";
 import { useToast } from "@/components/ui/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import Link from "next/link";
 
 const localStorageKey = "pdfItems"; // Key used to store data in localStorage
 
@@ -70,7 +72,12 @@ function GenerateWrapper() {
       setTopic(""); // Clear the input field
       toast({
         title: "Your paper is ready!",
-        description: "Click the link below to view or download it.",
+        description: "Click to view or download it.",
+        action: (
+          <Link href={url} target="_blank">
+            <ToastAction altText="Open">Open</ToastAction>
+          </Link>
+        ),
       });
     } catch (error) {
       console.error("Failed to generate PDF:", error);
