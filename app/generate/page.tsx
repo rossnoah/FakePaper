@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import React from "react";
 import NonSsr from "@/components/non-ssr";
+import { useToast } from "@/components/ui/use-toast";
 
 const localStorageKey = "pdfItems"; // Key used to store data in localStorage
 
@@ -15,6 +16,8 @@ export default function GeneratePage() {
 }
 
 function GenerateWrapper() {
+  const { toast } = useToast();
+
   const [pdfItems, setPdfItems] = useState(() => {
     // Initialize state from local storage or fall back to default
 
@@ -64,11 +67,15 @@ function GenerateWrapper() {
       const { message, title, url } = response.data;
       const name = title ?? `Paper #${pdfItems.length + 1}`;
       setPdfItems([...pdfItems, { name: name, url }]);
+      setTopic(""); // Clear the input field
     } catch (error) {
       console.error("Failed to generate PDF:", error);
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem while generating your paper.",
+      });
     }
     setIsLoading(false);
-    setTopic(""); // Clear the input field
   };
 
   return (
