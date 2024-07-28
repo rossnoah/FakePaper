@@ -163,6 +163,32 @@ function Generate({
   topic: any;
   setTopic: any;
 }) {
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    let progressInterval: NodeJS.Timeout;
+
+    if (isLoading) {
+      // Calculate the increment per interval for 20 seconds
+      const incrementPerInterval = 100 / ((20 * 1000) / 100);
+
+      progressInterval = setInterval(() => {
+        setLoadingProgress((prevProgress) => {
+          // Increment loading progress
+          if (prevProgress <= 90) {
+            return prevProgress + incrementPerInterval;
+          } else {
+            return prevProgress;
+          }
+        });
+      }, 100); // Interval in milliseconds
+    } else {
+      setLoadingProgress(0); // Reset progress when loading is done
+    }
+
+    return () => clearInterval(progressInterval);
+  }, [isLoading]);
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-semibold">
@@ -187,9 +213,19 @@ function Generate({
         disabled={isLoading}
       >
         {isLoading
-          ? "Generating... (Normally takes about 25 seconds)"
-          : "Generate"}
+          ? `Generating... (Normally takes about 25 seconds)`
+          : `Generate`}
       </Button>
+      {isLoading && (
+        <div className="relative pt-1">
+          <div className="flex h-2 overflow-hidden bg-gray-200 rounded">
+            <div
+              style={{ width: `${loadingProgress}%` }}
+              className="h-full bg-blue-500"
+            ></div>
+          </div>
+        </div>
+      )}
       <NonSsr>
         <div className="grid gap-2">
           {pdfItems.map((item, index) => (
