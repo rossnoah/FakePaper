@@ -3,7 +3,7 @@ module.exports = {
     return [
       {
         source: "/storage/:path*",
-        destination: process.env.BLOB_URL + "/storage/:path*",
+        destination: process.env.BLOB_URL + "/:path*",
       },
     ];
   },
