@@ -77,19 +77,49 @@ function GenerateWrapper() {
           timeout: 3 * 60 * 1000, // 3 minutes
         }
       );
-      const { message, title, url } = response.data;
-      const name = title ?? `Paper #${pdfItems.length + 1}`;
-      setPdfItems([...pdfItems, { name: name, url }]);
-      setTopic(""); // Clear the input field
-      toast({
-        title: "Your paper is ready!",
-        description: "Click to view or download it.",
-        action: (
-          <Link href={url} target="_blank">
-            <ToastAction altText="Open">Open</ToastAction>
-          </Link>
-        ),
-      });
+      const { jobId } = response.data;
+
+      const pollStatus = async () => {
+        try {
+          const statusResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/api/status/${jobId}`
+          );
+          const job = statusResponse.data;
+
+          if (job.status === "completed") {
+            setPdfItems([...pdfItems, { name: job.title, url: job.url }]);
+            toast({
+              title: "Your paper is ready!",
+              description: "Click to view or download it.",
+              action: (
+                <Link href={job.url} target="_blank">
+                  <ToastAction altText="Open">Open</ToastAction>
+                </Link>
+              ),
+            });
+            setIsLoading(false);
+          } else if (job.status === "error") {
+            toast({
+              title: "Uh oh! Something went wrong.",
+              description: job.message,
+            });
+            setIsLoading(false);
+          } else {
+            setTimeout(pollStatus, 3000); // Poll every 3 seconds
+          }
+        } catch (error) {
+          console.error("Failed to fetch job status:", error);
+          toast({
+            title: "Uh oh! Something went wrong.",
+            description:
+              (error as any).response.data ??
+              "There was a problem while checking the job status.",
+          });
+          setIsLoading(false);
+        }
+      };
+
+      pollStatus(); // Start polling for job status
     } catch (error) {
       console.error("Failed to generate PDF:", error);
       toast({
@@ -98,16 +128,8 @@ function GenerateWrapper() {
           (error as any).response.data ??
           "There was a problem while generating your paper.",
       });
-      if ((error as any).response.status === 429) {
-        toast({
-          title: "Rate limited",
-          description:
-            (error as any).response.data ??
-            "You have reached the rate limit for generating papers. Please try again later.",
-        });
-      }
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
