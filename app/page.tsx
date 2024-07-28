@@ -169,8 +169,8 @@ function Generate({
     let progressInterval: NodeJS.Timeout;
 
     if (isLoading) {
-      // Calculate the increment per interval for 20 seconds
-      const incrementPerInterval = 100 / ((20 * 1000) / 100);
+      // Calculate the increment per interval
+      const incrementPerInterval = 100 / ((30 * 1000) / 100);
 
       progressInterval = setInterval(() => {
         setLoadingProgress((prevProgress) => {
