@@ -186,7 +186,9 @@ function Generate({
         className={`btn ${isLoading ? "loading" : ""}`}
         disabled={isLoading}
       >
-        {isLoading ? "Generating..." : "Generate"}
+        {isLoading
+          ? "Generating... (Normally takes about 25 seconds)"
+          : "Generate"}
       </Button>
       <NonSsr>
         <div className="grid gap-2">
