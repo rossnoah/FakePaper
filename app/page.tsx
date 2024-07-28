@@ -68,6 +68,9 @@ function GenerateWrapper() {
         {
           topic: topic,
           isPremium: false, // Set this based on your application's logic
+        },
+        {
+          timeout: 3 * 60 * 1000, // 3 minutes
         }
       );
       const { message, title, url } = response.data;
