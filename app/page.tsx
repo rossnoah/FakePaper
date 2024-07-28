@@ -36,6 +36,10 @@ function GenerateWrapper() {
         url: "/storage/01c76e9f-51db-4cd7-aa3d-862632b5659c-MmP3rN9yGAuf2kdTpkSMjHpPuB60YT.pdf",
         name: "The Boeing 787 doors might fall off",
       },
+      {
+        url: "/storage/9c004692-206f-4867-a134-e551a18ffaee-zbkq7jniJ6N4L9rhqozVzsDVYEvheh.pdf",
+        name: "Water is Not Wet: A Comprehensive Analysis of Liquid Perception",
+      },
     ];
 
     try {
