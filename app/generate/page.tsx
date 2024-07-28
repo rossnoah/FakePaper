@@ -85,6 +85,14 @@ function GenerateWrapper() {
         title: "Uh oh! Something went wrong.",
         description: "There was a problem while generating your paper.",
       });
+      if ((error as any).response.status === 429) {
+        toast({
+          title: "Rate limited",
+          description:
+            (error as any).response.data.message ??
+            "You have reached the rate limit for generating papers. Please try again later.",
+        });
+      }
     }
     setIsLoading(false);
   };
