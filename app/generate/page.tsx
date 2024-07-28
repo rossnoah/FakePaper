@@ -83,13 +83,15 @@ function GenerateWrapper() {
       console.error("Failed to generate PDF:", error);
       toast({
         title: "Uh oh! Something went wrong.",
-        description: "There was a problem while generating your paper.",
+        description:
+          (error as any).response.data ??
+          "There was a problem while generating your paper.",
       });
       if ((error as any).response.status === 429) {
         toast({
           title: "Rate limited",
           description:
-            (error as any).response.data.message ??
+            (error as any).response.data ??
             "You have reached the rate limit for generating papers. Please try again later.",
         });
       }
