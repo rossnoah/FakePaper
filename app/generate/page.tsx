@@ -25,16 +25,16 @@ function GenerateWrapper() {
 
     const defaultItems = [
       {
-        url: "https://34bmow0mkp2ttlja.public.blob.vercel-storage.com/817d26a5-d4f1-4068-8971-f41e12bedf7f-2ht1EoJXtrSNjihPLg2AT6zPvIsQIo.pdf",
-        name: "Warlocks are the best class [Premium]",
+        url: "/storage/817d26a5-d4f1-4068-8971-f41e12bedf7f-2ht1EoJXtrSNjihPLg2AT6zPvIsQIo.pdf",
+        name: "Warlocks are the best class",
       },
       {
-        url: "https://34bmow0mkp2ttlja.public.blob.vercel-storage.com/79c904ec-e27b-4c99-86ea-a63873bdd8cc-YBWJyfG4N3amuY2BnBqVpGmb2qCvQi.pdf",
-        name: "The Moon is made of cheese [Premium]",
+        url: "/storage/79c904ec-e27b-4c99-86ea-a63873bdd8cc-YBWJyfG4N3amuY2BnBqVpGmb2qCvQi.pdf",
+        name: "The Moon is made of cheese",
       },
       {
-        url: "https://34bmow0mkp2ttlja.public.blob.vercel-storage.com/01c76e9f-51db-4cd7-aa3d-862632b5659c-MmP3rN9yGAuf2kdTpkSMjHpPuB60YT.pdf",
-        name: "The Boeing 787 doors might fall off [Premium]",
+        url: "/storage/01c76e9f-51db-4cd7-aa3d-862632b5659c-MmP3rN9yGAuf2kdTpkSMjHpPuB60YT.pdf",
+        name: "The Boeing 787 doors might fall off",
       },
     ];
 
