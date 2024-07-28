@@ -40,6 +40,10 @@ function GenerateWrapper() {
         url: "/storage/9c004692-206f-4867-a134-e551a18ffaee-zbkq7jniJ6N4L9rhqozVzsDVYEvheh.pdf",
         name: "Water is Not Wet: A Comprehensive Analysis of Liquid Perception",
       },
+      {
+        url: "storage/f439c498-091d-435a-86cb-ffc7bae9bdf6-5Pmx1QloI1UnQ2uGQRVzrXNb5oChkD.pdf",
+        name: "On the Definitive Assertion That Water is Wet",
+      },
     ];
 
     try {
