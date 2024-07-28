@@ -24,13 +24,7 @@ export function Shell({
             </div>
           </div>
         </Link>
-        <nav className="ml-auto hidden lg:flex gap-4 lg:gap-6 bg">
-          {/* <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="features"
-          >
-            Features
-          </Link> */}
+        {/* <nav className="ml-auto hidden lg:flex gap-4 lg:gap-6 bg">
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="generate"
@@ -43,29 +37,17 @@ export function Shell({
           >
             Pricing
           </Link>
-          {/* <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="templates"
-          >
-            Templates
-          </Link> */}
-          {/* <Link
-            className="text-sm font-medium hover:underline underline-offset-4"
-            href="about"
-          >
-            About
-          </Link> */}
           <Link
             className="text-sm font-medium hover:underline underline-offset-4"
             href="contact"
           >
             Contact
           </Link>
-        </nav>
+        </nav> */}
       </header>
       <main className="flex-1">{children}</main>
       <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t">
-        <nav className="sm:ml-auto flex gap-4 sm:gap-6">
+        {/* <nav className="sm:ml-auto flex gap-4 sm:gap-6">
           <Link
             className="text-xs hover:underline underline-offset-4"
             href="tos"
@@ -84,7 +66,7 @@ export function Shell({
           >
             Contact Us
           </Link>
-        </nav>
+        </nav> */}
       </footer>
     </div>
   );
