@@ -165,6 +165,22 @@ function Generate({
 }) {
   return (
     <div className="flex flex-col gap-4">
+      <div className="bg-blue-600 text-white font-bold py-2 px-4 rounded">
+        {
+          "It seems this didn't just disappear into the void of the internet so I guess I'll shill my website / linkedin (im a student)"
+        }
+        <br />
+        <a href="https://noah.dev" className="font-black text-xl">
+          Website: noah.dev
+        </a>
+        <br />
+        <a
+          href="https://linkedin.com/in/noahwross/"
+          className="font-black text-xl"
+        >
+          LinkedIn: /in/noahwross
+        </a>
+      </div>
       <h2 className="text-2xl font-semibold">
         Bring your scientific paper to life!
       </h2>
