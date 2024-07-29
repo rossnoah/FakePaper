@@ -283,20 +283,43 @@ const serverStatus = async () => {
 
 const ServerStatusBadge = () => {
   const [status, setStatus] = useState<{ status: string } | null>(null);
+  const [retryInterval, setRetryInterval] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchStatus = async () => {
       const serverData = await serverStatus();
       setStatus(serverData);
+
+      if (!serverData) {
+        const interval = setTimeout(fetchStatus, 30000);
+        setRetryInterval(interval);
+      } else {
+        if (retryInterval) {
+          clearTimeout(retryInterval);
+          setRetryInterval(null);
+        }
+      }
     };
 
     if (!status) {
       fetchStatus();
     }
-  }, [status]);
+
+    return () => {
+      if (retryInterval) {
+        clearTimeout(retryInterval);
+      }
+    };
+  }, [status, retryInterval]);
 
   if (status === null) {
-    return <div></div>;
+    return (
+      <span className="inline-block px-4 py-2 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+        Generation Server Offline
+      </span>
+    );
   }
 
   return (
