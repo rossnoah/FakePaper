@@ -72,9 +72,6 @@ function GenerateWrapper() {
         {
           topic: topic,
           isPremium: false, // Set this based on your application's logic
-        },
-        {
-          timeout: 3 * 60 * 1000, // 3 minutes
         }
       );
       const { jobId } = response.data;
@@ -169,15 +166,17 @@ function Generate({
     let progressInterval: NodeJS.Timeout;
 
     if (isLoading) {
-      // Calculate the increment per interval
-      const incrementPerInterval = 100 / ((30 * 1000) / 100);
-
       progressInterval = setInterval(() => {
         setLoadingProgress((prevProgress) => {
+          // Calculate the increment dynamically based on current progress
+          const remainingProgress = 100 - prevProgress;
+          const increment = Math.max(remainingProgress / 300, 0.05); // More aggressive slowing, minimum increment of 0.05
+
           // Increment loading progress
-          if (prevProgress <= 90) {
-            return prevProgress + incrementPerInterval;
+          if (prevProgress < 100) {
+            return prevProgress + increment;
           } else {
+            clearInterval(progressInterval);
             return prevProgress;
           }
         });
@@ -216,7 +215,7 @@ function Generate({
           ? `Generating... (Normally takes about 25 seconds)`
           : `Generate`}
       </Button>
-      {isLoading && (
+      {isLoading ? (
         <div className="relative pt-1">
           <div className="flex h-2 overflow-hidden bg-gray-200 rounded">
             <div
@@ -225,6 +224,10 @@ function Generate({
             ></div>
           </div>
         </div>
+      ) : (
+        <NonSsr>
+          <ServerStatusBadge />
+        </NonSsr>
       )}
       <NonSsr>
         <div className="grid gap-2">
@@ -265,3 +268,48 @@ function FileIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+const serverStatus = async () => {
+  try {
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch server status:", error);
+    return null;
+  }
+};
+
+const ServerStatusBadge = () => {
+  const [status, setStatus] = useState<{ status: string } | null>(null);
+
+  useEffect(() => {
+    const fetchStatus = async () => {
+      const serverData = await serverStatus();
+      setStatus(serverData);
+    };
+
+    if (!status) {
+      fetchStatus();
+    }
+  }, [status]);
+
+  if (status === null) {
+    return <div></div>;
+  }
+
+  return (
+    <>
+      {status.status === "ok" ? (
+        <span className="inline-block px-4 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800">
+          Generation Server Ready
+        </span>
+      ) : (
+        <span className="inline-block px-4 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+          Generation Server Offline
+        </span>
+      )}
+    </>
+  );
+};
