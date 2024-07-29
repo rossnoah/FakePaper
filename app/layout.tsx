@@ -14,7 +14,7 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "Fake Papers",
+  title: "FakePaper.app",
   description: "Generate realistic-looking joke research papers.",
 };
 
