@@ -26,6 +26,47 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+          name="description"
+          content="Generate realistic-looking joke research papers."
+        />
+        <meta
+          name="keywords"
+          content="joke research papers, fake papers, realistic papers, humor, parody"
+        />
+        <meta name="author" content="Your Name" />
+
+        <meta property="og:title" content="Fake Papers" />
+        <meta
+          property="og:description"
+          content="Generate realistic-looking joke research papers."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${process.env.NEXT_PUBLIC_URL}`} />
+        <meta
+          property="og:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/moon.png`}
+        />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Fake Papers" />
+        <meta
+          name="twitter:description"
+          content="Generate realistic-looking joke research papers."
+        />
+
+        <meta
+          name="twitter:image"
+          content={`${process.env.NEXT_PUBLIC_URL}/moon.png`}
+        />
+
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="canonical" href="https://www.yourwebsite.com" />
+
+        <title>Fake Papers</title>
+
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script
           data-name="BMC-Widget"
