@@ -79,7 +79,7 @@ export default function RootLayout({
   data-position="Left"
   data-x_margin="18"
   data-y_margin="18"
-  style="bottom: 18px; left: 18px; position: fixed;"
+  style={{ bottom: '18px', left: '18px', position: 'fixed' }}
 ></script>
       </head>
       <CSPostHogProvider>
