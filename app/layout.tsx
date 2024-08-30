@@ -63,7 +63,7 @@ export default function RootLayout({
         />
 
         <link rel="icon" href="/favicon.ico" />
-        <link rel="canonical" href="https://www.yourwebsite.com" />
+        <link rel="canonical" href="https://fakepaper.app" />
 
         <title>Fake Papers</title>
 
