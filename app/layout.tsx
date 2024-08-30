@@ -68,7 +68,7 @@ export default function RootLayout({
         <title>Fake Papers</title>
 
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
-        <script
+        {/* <script
   data-name="BMC-Widget"
   data-cfasync="false"
   src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
@@ -80,7 +80,7 @@ export default function RootLayout({
   data-x_margin="18"
   data-y_margin="18"
   style={{ bottom: '18px', left: '18px', position: 'fixed' }}
-></script>
+></script> */}
       </head>
       <CSPostHogProvider>
         <body
