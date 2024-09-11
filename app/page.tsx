@@ -29,17 +29,17 @@ function GenerateWrapper() {
       //   name: "Warlocks are the best class",
       // },
       {
-        url: "/s3/6a1ccd31-6f84-4d08-8b5b-7e785a592046.pdf",
+        url: "7f39a0fe-f2c7-44cf-b85d-594a86a71a6f.pdf",
         name: "The Moon is made of cheese",
       },
-      {
-        url: "/s3/934929cb-54bf-4246-8c19-5d65abe0e29a.pdf",
-        name: "The Boeing 737 doors might fall off",
-      },
       // {
-      //   url: "/storage/9c004692-206f-4867-a134-e551a18ffaee-zbkq7jniJ6N4L9rhqozVzsDVYEvheh.pdf",
-      //   name: "Water is Not Wet: A Comprehensive Analysis of Liquid Perception",
+      //   url: "/s3/934929cb-54bf-4246-8c19-5d65abe0e29a.pdf",
+      //   name: "The Boeing 737 doors might fall off",
       // },
+      {
+        url: "/s3/e3b413af-20cd-497a-b493-6d778eea3dfc.pdf",
+        name: "Water is Not Wet: A Philosophical Inquiry into the Nature of Moisture",
+      },
     ];
 
     try {
