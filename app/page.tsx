@@ -29,7 +29,7 @@ function GenerateWrapper() {
       //   name: "Warlocks are the best class",
       // },
       {
-        url: "7f39a0fe-f2c7-44cf-b85d-594a86a71a6f.pdf",
+        url: "/s3/7f39a0fe-f2c7-44cf-b85d-594a86a71a6f.pdf",
         name: "The Moon is made of cheese",
       },
       // {
@@ -38,7 +38,7 @@ function GenerateWrapper() {
       // },
       {
         url: "/s3/e3b413af-20cd-497a-b493-6d778eea3dfc.pdf",
-        name: "Water is Not Wet: A Philosophical Inquiry into the Nature of Moisture",
+        name: "Water is Not Wet: An Inquiry into the Nature of Moisture",
       },
     ];
 
