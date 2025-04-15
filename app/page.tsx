@@ -11,67 +11,71 @@ import { useToast } from "@/components/ui/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import Link from "next/link";
 
-const localStorageKey = "pdfItems"; // Key used to store data in localStorage
+// --- Step Progress Constants ---
+const LOADING_STEPS = [
+  "Submitting",
+  "Queued",
+  "Prompting",
+  "Generating",
+  "Finalizing",
+  "Done",
+] as const;
+type LoadingStep = (typeof LOADING_STEPS)[number];
 
+const localStorageKey = "pdfItems";
+
+// --- Main Page ---
 export default function GeneratePage() {
   return <GenerateWrapper />;
 }
 
+// --- Wrapper: Handles State and Logic ---
 function GenerateWrapper() {
   const { toast } = useToast();
 
   const [pdfItems, setPdfItems] = useState(() => {
-    // Initialize state from local storage or fall back to default
-
     const defaultItems = [
-      // {
-      //   url: "/storage/817d26a5-d4f1-4068-8971-f41e12bedf7f-2ht1EoJXtrSNjihPLg2AT6zPvIsQIo.pdf",
-      //   name: "Warlocks are the best class",
-      // },
       {
         url: "/s3/7f39a0fe-f2c7-44cf-b85d-594a86a71a6f.pdf",
         name: "The Moon is made of cheese",
       },
-      // {
-      //   url: "/s3/934929cb-54bf-4246-8c19-5d65abe0e29a.pdf",
-      //   name: "The Boeing 737 doors might fall off",
-      // },
       {
         url: "/s3/e3b413af-20cd-497a-b493-6d778eea3dfc.pdf",
         name: "Water is Not Wet: An Inquiry into the Nature of Moisture",
       },
     ];
-
     try {
       const storedItems = localStorage.getItem(localStorageKey);
-
       return storedItems ? JSON.parse(storedItems) : defaultItems;
     } catch (e) {
       return defaultItems;
     }
   });
+
   const [topic, setTopic] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingStep, setLoadingStep] = useState<LoadingStep | null>(null);
 
   useEffect(() => {
-    // Store the pdfItems state to local storage whenever it changes
     localStorage.setItem(localStorageKey, JSON.stringify(pdfItems));
   }, [pdfItems]);
 
+  // --- Enhanced Generate Handler with Steps ---
   const handleGenerate = async () => {
-    if (!topic.trim()) return; // Don't proceed if the topic is empty
-
+    if (!topic.trim()) return;
     setIsLoading(true);
+    setLoadingStep("Submitting");
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_EXTERNAL_SERVER}/api/generate`,
         {
           topic: topic,
-          isPremium: false, // Set this based on your application's logic
+          isPremium: false,
         }
       );
       const { jobId } = response.data;
 
+      // --- Polling with Step Updates ---
       const pollStatus = async () => {
         try {
           const statusResponse = await axios.get(
@@ -79,7 +83,14 @@ function GenerateWrapper() {
           );
           const job = statusResponse.data;
 
+          // --- Step Mapping ---
+          if (job.status === "queued") setLoadingStep("Queued");
+          else if (job.status === "prompting") setLoadingStep("Prompting");
+          else if (job.status === "generating") setLoadingStep("Generating");
+          else if (job.status === "finalizing") setLoadingStep("Finalizing");
+
           if (job.status === "completed") {
+            setLoadingStep("Done");
             setPdfItems([...pdfItems, { name: job.title, url: job.url }]);
             toast({
               title: "Your paper is ready!",
@@ -91,37 +102,39 @@ function GenerateWrapper() {
               ),
             });
             setIsLoading(false);
+            setTimeout(() => setLoadingStep(null), 1000);
           } else if (job.status === "error") {
             toast({
               title: "Uh oh! Something went wrong.",
               description: job.message,
             });
             setIsLoading(false);
+            setLoadingStep(null);
           } else {
-            setTimeout(pollStatus, 3000); // Poll every 3 seconds
+            setTimeout(pollStatus, 2000);
           }
         } catch (error) {
-          console.error("Failed to fetch job status:", error);
           toast({
             title: "Uh oh! Something went wrong.",
             description:
-              (error as any).response.data ??
+              (error as any).response?.data ??
               "There was a problem while checking the job status.",
           });
           setIsLoading(false);
+          setLoadingStep(null);
         }
       };
 
-      pollStatus(); // Start polling for job status
+      pollStatus();
     } catch (error) {
-      console.error("Failed to generate PDF:", error);
       toast({
         title: "Uh oh! Something went wrong.",
         description:
-          (error as any).response.data ??
+          (error as any).response?.data ??
           "There was a problem while generating your paper.",
       });
       setIsLoading(false);
+      setLoadingStep(null);
     }
   };
 
@@ -129,11 +142,11 @@ function GenerateWrapper() {
     <main>
       <div className="flex flex-row items-center justify-around">
         <div className="flex-1 max-w-lg">
-          {/* Adjust 'max-w-xs' to your desired maximum width */}
-          <Generate
+          <GenerateForm
             pdfItems={pdfItems}
             onGenerate={handleGenerate}
             isLoading={isLoading}
+            loadingStep={loadingStep}
             topic={topic}
             setTopic={setTopic}
           />
@@ -143,47 +156,22 @@ function GenerateWrapper() {
   );
 }
 
-function Generate({
+// --- Generate Form Component ---
+function GenerateForm({
   pdfItems,
   onGenerate,
   isLoading,
+  loadingStep,
   topic,
   setTopic,
 }: {
   pdfItems: Array<{ url: string; name: string }>;
-  onGenerate: any;
-  isLoading: any;
-  topic: any;
-  setTopic: any;
+  onGenerate: () => void;
+  isLoading: boolean;
+  loadingStep: LoadingStep | null;
+  topic: string;
+  setTopic: (t: string) => void;
 }) {
-  const [loadingProgress, setLoadingProgress] = useState(0);
-
-  useEffect(() => {
-    let progressInterval: NodeJS.Timeout;
-
-    if (isLoading) {
-      progressInterval = setInterval(() => {
-        setLoadingProgress((prevProgress) => {
-          // Calculate the increment dynamically based on current progress
-          const remainingProgress = 100 - prevProgress;
-          const increment = Math.max(remainingProgress / 300, 0.05); // More aggressive slowing, minimum increment of 0.05
-
-          // Increment loading progress
-          if (prevProgress < 100) {
-            return prevProgress + increment;
-          } else {
-            clearInterval(progressInterval);
-            return prevProgress;
-          }
-        });
-      }, 100); // Interval in milliseconds
-    } else {
-      setLoadingProgress(0); // Reset progress when loading is done
-    }
-
-    return () => clearInterval(progressInterval);
-  }, [isLoading]);
-
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-semibold">
@@ -212,39 +200,82 @@ function Generate({
           : `Generate`}
       </Button>
       {isLoading ? (
-        <div className="relative pt-1">
-          <div className="flex h-2 overflow-hidden bg-gray-200 rounded">
-            <div
-              style={{ width: `${loadingProgress}%` }}
-              className="h-full bg-blue-500"
-            ></div>
-          </div>
-        </div>
+        <LoadingSteps currentStep={loadingStep} />
       ) : (
         <NonSsr>
           <ServerStatusBadge />
         </NonSsr>
       )}
       <NonSsr>
-        <div className="grid gap-2">
-          {pdfItems.map((item, index) => (
-            <a
-              href={item.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex w-full justify-start items-center p-2 border border-gray-200 rounded hover:bg-gray-100"
-              key={index}
-            >
-              <FileIcon className="mr-2 h-4 w-4" />
-              {item.name}
-            </a>
-          ))}
-        </div>
+        <PdfList pdfItems={pdfItems} />
       </NonSsr>
     </div>
   );
 }
 
+// --- Loading Steps Component ---
+function LoadingSteps({ currentStep }: { currentStep: LoadingStep | null }) {
+  // For progress bar
+  const currentIndex = currentStep ? LOADING_STEPS.indexOf(currentStep) : 0;
+  const percent = ((currentIndex + 1) / LOADING_STEPS.length) * 100;
+
+  return (
+    <div className="w-full">
+      <div className="flex items-center mb-2">
+        {LOADING_STEPS.map((step, idx) => (
+          <React.Fragment key={step}>
+            <div
+              className={`flex items-center ${
+                idx <= currentIndex
+                  ? "text-blue-600 font-bold"
+                  : "text-gray-400"
+              }`}
+            >
+              <span className="text-sm">{step}</span>
+              {idx < LOADING_STEPS.length - 1 && (
+                <span className="mx-2">→</span>
+              )}
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="relative pt-1">
+        <div className="flex h-2 overflow-hidden bg-gray-200 rounded">
+          <div
+            style={{ width: `${percent}%` }}
+            className="h-full bg-blue-500 transition-all"
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- PDF List Component ---
+function PdfList({
+  pdfItems,
+}: {
+  pdfItems: Array<{ url: string; name: string }>;
+}) {
+  return (
+    <div className="grid gap-2">
+      {pdfItems.map((item, index) => (
+        <a
+          href={item.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex w-full justify-start items-center p-2 border border-gray-200 rounded hover:bg-gray-100"
+          key={index}
+        >
+          <FileIcon className="mr-2 h-4 w-4" />
+          {item.name}
+        </a>
+      ))}
+    </div>
+  );
+}
+
+// --- File Icon Component ---
 function FileIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   return (
     <svg
@@ -265,6 +296,7 @@ function FileIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
   );
 }
 
+// --- Server Status Badge ---
 const serverStatus = async () => {
   try {
     const response = await axios.get(
@@ -272,7 +304,6 @@ const serverStatus = async () => {
     );
     return response.data;
   } catch (error) {
-    console.error("Failed to fetch server status:", error);
     return null;
   }
 };
